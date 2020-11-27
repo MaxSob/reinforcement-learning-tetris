@@ -9,8 +9,8 @@ import Keyboard from "./components/keyboard/index.vue";
 import Logo from "./components/logo/index.vue";
 import Matrix from "./components/matrix/index.vue";
 import mapState from "vuex";
-import transform, lastRecord, speeds, i18n, lan from "./unit/const";
-import visibilityChangeEvent, isFocus from "./unit/";
+import { transform, lastRecord, speeds, i18n, lan } from "./unit/const";
+import { visibilityChangeEvent, isFocus } from "./unit/";
 import states from "./control/states";
 export default {
   mounted() {

@@ -1,5 +1,5 @@
 import isClear from "../../unit/";
-import fillLine, blankLine from "../../unit/const";
+import { fillLine, blankLine } from "../../unit/const";
 import states from "../../control/states";
 const t = setTimeout;
 export default {
@@ -13,12 +13,7 @@ export default {
     }
   },
   render() {
-    let matrix
-    if (this.isOver) {
-      matrix = this.overState;
-    } else {
-      matrix = this.getResult();
-    }
+    let matrix = this.isOver ? this.overState : this.getResult();
    
     return (
       <div class='matrix'>

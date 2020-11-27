@@ -1,11 +1,11 @@
 import store from "../vuex/store";
-import want, isClear, isOver from "../unit/";
-import 
+import { want, isClear, isOver } from "../unit/";
+import {
   speeds,
   blankLine,
   blankMatrix,
   clearPoints,
-  eachLines
+  eachLines }
  from "../unit/const";
 import music from "../unit/music";
 

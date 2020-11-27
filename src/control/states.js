@@ -1,33 +1,33 @@
-import store from '../vuex/store'
-import { want, isClear, isOver } from '../unit/'
-import {
+import store from "../vuex/store";
+import want, isClear, isOver from "../unit/";
+import 
   speeds,
   blankLine,
   blankMatrix,
   clearPoints,
   eachLines
-} from '../unit/const'
-import { music } from '../unit/music'
+ from "../unit/const";
+import music from "../unit/music";
 
 const getStartMatrix = startLines => {
   // 生成startLines
   const getLine = (min, max) => {
     // 返回标亮个数在min~max之间一行方块, (包含边界)
-    const count = parseInt((max - min + 1) * Math.random() + min, 10)
-    const line = []
+    const count = parseInt((max - min + 1) * Math.random() + min, 10);
+    const line = [];
     for (let i = 0; i < count; i++) {
       // 插入高亮
       line.push(1)
     }
     for (let i = 0, len = 10 - count; i < len; i++) {
       // 在随机位置插入灰色
-      const index = parseInt((line.length + 1) * Math.random(), 10)
-      line.splice(index, 0, 0)
+      const index = parseInt((line.length + 1) * Math.random(), 10);
+      line.splice(index, 0, 0);
     }
 
-    return line
+    return line;
   }
-  let startMatrix = []
+  let startMatrix = [];
 
   for (let i = 0; i < startLines; i++) {
     if (i <= 2) {
@@ -43,9 +43,9 @@ const getStartMatrix = startLines => {
   }
   for (let i = 0, len = 20 - startLines; i < len; i++) {
     // 插入上部分的灰色
-    startMatrix.unshift(blankLine)
+    startMatrix.unshift(blankLine);
   }
-  return startMatrix
+  return startMatrix;
 }
 
 const states = {
@@ -55,17 +55,17 @@ const states = {
   // 游戏开始
   start: () => {
     if (music.start) {
-      music.start()
+      music.start();
     }
-    const state = store.state
-    states.dispatchPoints(0)
-    store.commit('speedRun', state.speedStart)
-    const startLines = state.startLines
-    const startMatrix = getStartMatrix(startLines)
-    store.commit('matrix', startMatrix)
-    store.commit('moveBlock', { type: state.next })
-    store.commit('nextBlock', '')
-    states.auto()
+    const state = store.state;
+    states.dispatchPoints(0);
+    store.commit("speedRun", state.speedStart);
+    const startLines = state.startLines;
+    const startMatrix = getStartMatrix(startLines);
+    store.commit("matrix", startMatrix);
+    store.commit("moveBlock", { type: state.next });
+    store.commit("nextBlock", "");
+    states.auto();
   },
 
   // 自动下落
@@ -78,7 +78,7 @@ const states = {
       cur = state.cur
       const next = cur.fall()
       if (want(next, state.matrix)) {
-        store.commit('moveBlock', next)
+        store.commit("moveBlock", next)
         states.fallInterval = setTimeout(fall, speeds[state.speedRun - 1])
       } else {
         let matrix = JSON.parse(JSON.stringify(state.matrix))
@@ -107,9 +107,9 @@ const states = {
   // 一个方块结束, 触发下一个
   nextAround: (matrix, stopDownTrigger) => {
     clearTimeout(states.fallInterval)
-    store.commit('lock', true)
-    store.commit('matrix', matrix)
-    if (typeof stopDownTrigger === 'function') {
+    store.commit("lock", true)
+    store.commit("matrix", matrix)
+    if (typeof stopDownTrigger === "function") {
       stopDownTrigger()
     }
 
@@ -131,16 +131,16 @@ const states = {
       return
     }
     setTimeout(() => {
-      store.commit('lock', false)
-      store.commit('moveBlock', { type: store.state.next })
-      store.commit('nextBlock', '')
+      store.commit("lock", false)
+      store.commit("moveBlock", { type: store.state.next })
+      store.commit("nextBlock", "")
       states.auto()
     }, 100)
   },
 
   // 页面焦点变换
   focus: isFocus => {
-    store.commit('focus', isFocus)
+    store.commit("focus", isFocus)
     if (!isFocus) {
       clearTimeout(states.fallInterval)
       return
@@ -153,7 +153,7 @@ const states = {
 
   // 暂停
   pause: isPause => {
-    store.commit('pause', isPause)
+    store.commit("pause", isPause)
     if (isPause) {
       clearTimeout(states.fallInterval)
       return
@@ -170,13 +170,13 @@ const states = {
       // newMatrix = newMatrix.unshift(List(blankLine))
        newMatrix.unshift(blankLine)
     })
-    store.commit('matrix', newMatrix)
-    store.commit('moveBlock', { type: state.next })
-    store.commit('nextBlock', '')
+    store.commit("matrix", newMatrix)
+    store.commit("moveBlock", { type: state.next })
+    store.commit("nextBlock", "")
     states.auto()
-    store.commit('lock', false)
+    store.commit("lock", false)
     const clearLines = state.clearLines + lines.length
-    store.commit('clearLines', clearLines)
+    store.commit("clearLines", clearLines)
 
     const addPoints = store.state.points + clearPoints[lines.length - 1] // 一次消除的行越多, 加分越多
     states.dispatchPoints(addPoints)
@@ -184,32 +184,32 @@ const states = {
     const speedAdd = Math.floor(clearLines / eachLines) // 消除行数, 增加对应速度
     let speedNow = state.speedStart + speedAdd
     speedNow = speedNow > 6 ? 6 : speedNow
-    store.commit('speedRun', speedNow)
+    store.commit("speedRun", speedNow)
   },
 
   // 游戏结束, 触发动画
   overStart: () => {
     clearTimeout(states.fallInterval)
-    store.commit('lock', true)
-    store.commit('reset', true)
-    store.commit('pause', false)
+    store.commit("lock", true)
+    store.commit("reset", true)
+    store.commit("pause", false)
   },
 
   // 游戏结束动画完成
   overEnd: () => {
-    store.commit('matrix', blankMatrix)
-    store.commit('moveBlock', { reset: true })
-    store.commit('reset', false)
-    store.commit('lock', false)
-    store.commit('clearLines', 0)
+    store.commit("matrix", blankMatrix)
+    store.commit("moveBlock", { reset: true })
+    store.commit("reset", false)
+    store.commit("lock", false)
+    store.commit("clearLines", 0)
   },
 
   // 写入分数
   dispatchPoints: point => {
     // 写入分数, 同时判断是否创造最高分
-    store.commit('points', point)
+    store.commit("points", point)
     if (point > 0 && point > store.state.max) {
-      store.commit('max', point)
+      store.commit("max", point)
     }
   }
 }

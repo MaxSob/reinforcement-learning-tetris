@@ -1,28 +1,28 @@
-import Decorate from './components/decorate/index.vue'
-import Guide from './components/guide/index.vue'
-import Next from './components/next/index.vue'
-import Music from './components/music/index.vue'
-import Pause from './components/pause/index.vue'
-import Number from './components/number/index.vue'
-import Point from './components/point/index.vue'
-import Keyboard from './components/keyboard/index.vue'
-import Logo from './components/logo/index.vue'
-import Matrix from './components/matrix/index.vue'
-import { mapState } from 'vuex'
-import { transform, lastRecord, speeds, i18n, lan } from './unit/const'
-import { visibilityChangeEvent, isFocus } from './unit/'
-import states from './control/states'
+import Decorate from "./components/decorate/index.vue";
+import Guide from "./components/guide/index.vue";
+import Next from "./components/next/index.vue";
+import Music from "./components/music/index.vue";
+import Pause from "./components/pause/index.vue";
+import Number from "./components/number/index.vue";
+import Point from "./components/point/index.vue";
+import Keyboard from "./components/keyboard/index.vue";
+import Logo from "./components/logo/index.vue";
+import Matrix from "./components/matrix/index.vue";
+import mapState from "vuex";
+import transform, lastRecord, speeds, i18n, lan from "./unit/const";
+import visibilityChangeEvent, isFocus from "./unit/";
+import states from "./control/states";
 export default {
   mounted() {
-    this.render()
-    window.addEventListener('resize', this.resize.bind(this), true)
+    this.render();
+    window.addEventListener("resize", this.resize.bind(this), true);
   },
   data() {
     return {
       size: {},
       w: document.documentElement.clientWidth,
       h: document.documentElement.clientHeight,
-      filling: ''
+      filling: ""
     }
   },
   components: {
@@ -39,25 +39,25 @@ export default {
   },
   computed: {
     pContent() {
-      return this.cur ? i18n.cleans[lan] : i18n.startLine[lan]
+      return this.cur ? i18n.cleans[lan] : i18n.startLine[lan];
     },
     level: () => i18n.level[lan],
     nextText: () => i18n.next[lan],
     ...mapState([
-      'matrix',
-      'keyboard',
-      'music',
-      'pause',
-      'next',
-      'cur',
-      'speedStart',
-      'speedRun',
-      'startLines',
-      'clearLines',
-      'points',
-      'max',
-      'reset',
-      'drop'
+      "matrix",
+      "keyboard",
+      "music",
+      "pause",
+      "next",
+      "cur",
+      "speedStart",
+      "speedRun",
+      "startLines",
+      "clearLines",
+      "points",
+      "max",
+      "reset",
+      "drop"
     ])
   },
   methods: {
@@ -75,9 +75,9 @@ export default {
           scale = w / 640
           filling = (h - 960 * scale) / scale / 3
           css = {
-            'padding-top': Math.floor(filling) + 42 + 'px',
-            'padding-bottom': Math.floor(filling) + 'px',
-            'margin-top': Math.floor(-480 - filling * 1.5) + 'px'
+            "padding-top": Math.floor(filling) + 42 + "px",
+            "padding-bottom": Math.floor(filling) + "px",
+            "margin-top": Math.floor(-480 - filling * 1.5) + "px"
           }
         }
         css[transform] = `scale(${scale})`

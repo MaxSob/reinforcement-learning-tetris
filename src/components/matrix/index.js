@@ -1,13 +1,13 @@
-import { isClear } from '../../unit/'
-import { fillLine, blankLine } from '../../unit/const'
-import states from '../../control/states'
-const t = setTimeout
+import isClear from "../../unit/";
+import fillLine, blankLine from "../../unit/const";
+import states from "../../control/states";
+const t = setTimeout;
 export default {
-  props: ['cur', 'reset', 'propMatrix'],
+  props: ["cur", "reset", "propMatrix"],
   watch: {
     $props: {
       handler(val = {}, oldVal) {
-        this.propsChange(val)
+        this.propsChange(val);
       },
       deep: true
     }
@@ -15,17 +15,17 @@ export default {
   render() {
     let matrix
     if (this.isOver) {
-      matrix = this.overState
+      matrix = this.overState;
     } else {
-      matrix = this.getResult()
+      matrix = this.getResult();
     }
    
     return (
-      <div class="matrix">
+      <div class='matrix'>
         {matrix.map((p, k1) =>
           <p>
             {p.map((e, k2) =>
-              <b class={(e === 1 ? 'c' : '') + (e === 2 ? 'd' : '')} />
+              <b class={(e === 1 ? "c" : "") + (e === 2 ? "d" : "")} />
             )}
           </p>
         )}
@@ -42,30 +42,30 @@ export default {
   },
   methods: {
     propsChange(nextProps) {
-      const clears = isClear(nextProps.propMatrix)
-      const overs = nextProps.reset
+      const clears = isClear(nextProps.propMatrix);
+      const overs = nextProps.reset;
       setTimeout(() => {
-        this.clearLines = clears
-        this.isOver = overs
+        this.clearLines = clears;
+        this.isOver = overs;
       }, 0)
       if (clears && !this.clearLines) {
-        this.clearAnimate(clears)
+        this.clearAnimate(clears);
       }
       if (!clears && overs && !this.isOver) {
-        this.over(nextProps)
+        this.over(nextProps);
       }
     },
     getResult(props) {
       if (!props) {
-        props = this.$props
+        props = this.$props;
       }
-      const cur = props.cur
-      const shape = cur && cur.shape
-      const xy = cur && cur.xy
-      let matrix = JSON.parse(JSON.stringify(props.propMatrix))
-      const clearLines = this.clearLines
+      const cur = props.cur;
+      const shape = cur && cur.shape;
+      const xy = cur && cur.xy;
+      let matrix = JSON.parse(JSON.stringify(props.propMatrix));
+      const clearLines = this.clearLines;
       if (clearLines) {
-        const animateColor = this.animateColor
+        const animateColor = this.animateColor;
         clearLines.forEach(index => {
           matrix[index]=[
             animateColor,
@@ -80,36 +80,34 @@ export default {
             animateColor
           ]
          
-        })
+        });
       } else if (shape) {
         shape.forEach((m, k1) =>
           m.forEach((n, k2) => {
             if (n && xy[0] + k1 >= 0) {
-              // 竖坐标可以为负
-              let line = matrix[xy[0]+k1]
-              let color
+              let line = matrix[xy[0]+k1];
+              let color;
               if (line[xy[1] + k2] === 1 && !clearLines) {
-                // 矩阵与方块重合
-                color = 2
+                color = 2;
               } else {
-                color = 1
+                color = 1;
               }
-              line[xy[1] + k2]=color
-              matrix[xy[0] + k1]=line
+              line[xy[1] + k2]=color;
+              matrix[xy[0] + k1]=line;
             }
           })
         )
       }
-      return matrix
+      return matrix;
     },
     clearAnimate() {
       const anima = callback => {
         t(() => {
-          this.animateColor = 0
+          this.animateColor = 0;
           t(() => {
-            this.animateColor = 2
-            if (typeof callback === 'function') {
-              callback()
+            this.animateColor = 2;
+            if (typeof callback === "function") {
+              callback();
             }
           }, 100)
         }, 100)
@@ -118,8 +116,8 @@ export default {
         anima(() => {
           anima(() => {
             t(() => {
-              states.clearLines(this.propMatrix, this.clearLines)
-            }, 100)
+              states.clearLines(this.propMatrix, this.clearLines);
+            }, 100);
           })
         })
       })
